@@ -20,6 +20,7 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Ubic::Service::Hypnotoad",
   "PREREQ_PM" => {
+    "Capture::Tiny" => "0.15",
     "File::Basename" => 0,
     "Time::HiRes" => 0,
     "Ubic::Result" => 0,
@@ -28,9 +29,9 @@ my %WriteMakefileArgs = (
     "warnings" => 0
   },
   "TEST_REQUIRES" => {},
-  "VERSION" => "0.002",
+  "VERSION" => "0.1",
   "test" => {
-    "TESTS" => ""
+    "TESTS" => "t/*.t"
   }
 );
 

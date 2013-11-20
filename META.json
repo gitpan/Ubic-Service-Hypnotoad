@@ -21,6 +21,7 @@
       },
       "runtime" : {
          "requires" : {
+            "Capture::Tiny" : "0.15",
             "File::Basename" : "0",
             "Time::HiRes" : "0",
             "Ubic::Result" : "0",
@@ -43,6 +44,6 @@
          "web" : "https://github.com/akarelas/ubic-service-hypnotoad"
       }
    },
-   "version" : "0.002"
+   "version" : "0.1"
 }
 
