@@ -1,9 +1,6 @@
 package Ubic::Service::Hypnotoad;
-{
-  $Ubic::Service::Hypnotoad::VERSION = '0.1';
-}
 # ABSTRACT: Ubic service module for Mojolicious Hypnotoad
-
+$Ubic::Service::Hypnotoad::VERSION = '0.2';
 use strict;
 use warnings;
 
@@ -20,8 +17,8 @@ use Capture::Tiny qw(:all);
 sub new {
 	my ($class, $opt) = @_;
 
-	my $bin = $opt->{'bin'} // 'hypnotoad';
-	length $bin	or die "missing 'bin' parameter in new";
+	my $bin = [split /\s+/, ($opt->{'bin'} // 'hypnotoad')]		unless ref $opt->{bin} eq 'ARRAY';
+	@$bin	or die "missing 'bin' parameter in new";
 	my $app = $opt->{'app'} // '';
 	length $app	or die "missing 'app' parameter in new";
 	my $pid_file = $opt->{'pid_file'} // dirname($app).'/hypnotoad.pid';
@@ -36,6 +33,7 @@ sub new {
 		pid_file => $pid_file,
 		start_time => undef,
 		stop_time => undef,
+		cwd => $opt->{cwd},
 	}, $class;
 }
 
@@ -86,7 +84,12 @@ sub start_impl {
 	my $self = shift;
 
 	local %ENV = (%ENV, %{ $self->{'env'} });
-	system($self->{'bin'}, $self->{'app'});
+
+	if (defined $self->{cwd}) {
+		chdir $self->{cwd} or die "chdir to '$self->{cwd}' failed: $!";
+	}
+
+	system(@{$self->{'bin'}}, $self->{'app'});
 	$self->{'start_time'} = time;
 	$self->{'stop_time'} = undef;
 
@@ -96,9 +99,13 @@ sub start_impl {
 sub stop_impl {
 	my $self = shift;
 
+	if (defined $self->{cwd}) {
+		chdir $self->{cwd} or die "chdir to '$self->{cwd}' failed: $!";
+	}
+
 	local %ENV = (%ENV, %{ $self->{'env'} });
 	my (undef, $stderr) = capture {
-		system($self->{'bin'}, '-s', $self->{'app'});
+		system(@{$self->{'bin'}}, '-s', $self->{'app'});
 	};
 	print $stderr	if length $stderr;
 	$self->{'stop_time'} = time;
@@ -144,15 +151,16 @@ Ubic::Service::Hypnotoad - Ubic service module for Mojolicious Hypnotoad
 
 =head1 VERSION
 
-version 0.1
+version 0.2
 
 =head1 SYNOPSIS
 
     use Ubic::Service::Hypnotoad;
     return Ubic::Service::Hypnotoad->new({
-        bin => '/usr/bin/hypnotoad', # optional, defaults to 'hypnotoad'
+        bin => '/usr/bin/hypnotoad', # or 'carton exec hypnotoad', or ['carton', 'exec', 'hypnotoad'], optional, defaults to 'hypnotoad'
         app => '/home/www/mysite.app',
         pid_file => '/var/log/mysite.pid', # optional, defaults to a hypnotoad.pid file lying next to "app"
+        cwd => '/path/to/app/', # optional, сhange working directory before starting a daemon
         env => { # optional environment variables
             MOJO_FLAG_A => 1,
             MOJO_CONFIG => '...',
@@ -190,11 +198,11 @@ your bug as I make changes.
 
 =head1 AUTHOR
 
-Alexander Karelas <karjala@cpan.org>
+Alexander Karelas <karjala@karjala.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Alexander Karelas.
+This software is copyright (c) 2014 by Alexander Karelas.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

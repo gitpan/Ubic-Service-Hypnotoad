@@ -1,10 +1,10 @@
 {
    "abstract" : "Ubic service module for Mojolicious Hypnotoad",
    "author" : [
-      "Alexander Karelas <karjala@cpan.org>"
+      "Alexander Karelas <karjala@karjala.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300036, CPAN::Meta::Converter version 2.132140",
+   "generated_by" : "Dist::Zilla version 5.015, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "perl_5"
    ],
@@ -44,6 +44,6 @@
          "web" : "https://github.com/akarelas/ubic-service-hypnotoad"
       }
    },
-   "version" : "0.1"
+   "version" : "0.2"
 }
 
