@@ -1,6 +1,6 @@
 package Ubic::Service::Hypnotoad;
 # ABSTRACT: Ubic service module for Mojolicious Hypnotoad
-$Ubic::Service::Hypnotoad::VERSION = '0.2';
+$Ubic::Service::Hypnotoad::VERSION = '0.2001';
 use strict;
 use warnings;
 
@@ -151,7 +151,7 @@ Ubic::Service::Hypnotoad - Ubic service module for Mojolicious Hypnotoad
 
 =head1 VERSION
 
-version 0.2
+version 0.2001
 
 =head1 SYNOPSIS
 
@@ -160,7 +160,7 @@ version 0.2
         bin => '/usr/bin/hypnotoad', # or 'carton exec hypnotoad', or ['carton', 'exec', 'hypnotoad'], optional, defaults to 'hypnotoad'
         app => '/home/www/mysite.app',
         pid_file => '/var/log/mysite.pid', # optional, defaults to a hypnotoad.pid file lying next to "app"
-        cwd => '/path/to/app/', # optional, сhange working directory before starting a daemon
+        cwd => '/path/to/app/', # optional, change working directory before starting a daemon
         env => { # optional environment variables
             MOJO_FLAG_A => 1,
             MOJO_CONFIG => '...',
